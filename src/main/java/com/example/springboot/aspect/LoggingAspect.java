@@ -1,10 +1,8 @@
 package com.example.springboot.aspect;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -36,5 +34,16 @@ public class LoggingAspect {
             message.append(" Return value::" + returnValue.toString());
         }
         LOGGER.info(message.toString());
+    }
+
+    @Around(value = "executeLogging()")
+    public Object logMethodReturn(ProceedingJoinPoint jointPoint) throws Throwable{
+        long startTime = System.currentTimeMillis();
+        Object returnValue = jointPoint.proceed();
+        long totalTime = System.currentTimeMillis() - startTime;
+        StringBuilder message = new StringBuilder("Total time taken for method : " + totalTime + "ms ");
+        message.append(jointPoint.getSignature().getName());
+        LOGGER.info(message.toString());
+        return returnValue;
     }
 }
