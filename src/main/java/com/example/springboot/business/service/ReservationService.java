@@ -1,5 +1,6 @@
 package com.example.springboot.business.service;
 
+import com.example.springboot.aspect.Loggable;
 import com.example.springboot.business.domain.RoomReservation;
 import com.example.springboot.data.entity.Guest;
 import com.example.springboot.data.entity.Reservation;
@@ -27,6 +28,7 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
+    @Loggable
     public List<RoomReservation> getRoomReservationsForDate(Date resDate){
         Iterable<Room> rooms = this.roomRepository.findAll();
         Map<Long, RoomReservation> roomReservationMap = new HashMap<>();
